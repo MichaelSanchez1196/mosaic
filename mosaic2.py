@@ -1,9 +1,8 @@
 from PIL import Image
 from collections import Counter 
-#for the image open(line 3), make sure we include our path for the image in our computer
-im = Image.open("/home/michael/Documents/spring16/cst205/project2/MarleySoccer.jpg")
-#im.show()
+im = Image.open("/home/michael/Documents/spring16/cst205/project2/spongeBob.jpg")
 
+#CREATED LISTS TO KEEP TRACK OF THE VALUES OF EACH PIXEL
 redPixelList = []
 greenPixelList = []
 bluePixelList = []
@@ -20,19 +19,19 @@ beginWidth = 0
 beginHeight = 0
 
 
-
+#CREATES A NEW EMPTY CANVAS IMAGE
 finalImg = Image.new("RGB",(width,height),"Black")
 
-#finalImg.show()
 
-		#rgb_im = im.convert('RGB')
-		#r, g, b = rgb_im.getpixel((xPos, yPos))
 """
+-------------------------------------------------------------------
+BEGINNING TO FINDING THE COLORS OF OUR TILES 
+-------------------------------------------------------------------
+"""
+
 for times in range(0,3):
 	for xPos in range(beginWidth,tileWidth):
 		for yPos in range(beginHeight,tileHeight):
-
-		#pixel = getPixel(im,xPos,yPos)
 		
 			rgb_im = im.convert('RGB')
 			r,g,b, = rgb_im.getpixel((xPos,yPos))
@@ -40,15 +39,10 @@ for times in range(0,3):
 	    	redPixelList.append(r)
 	    	greenPixelList.append(g)
 	    	bluePixelList.append(b)
-		
-
-	#newPixel = getPixel(finalImg,xPos,yPos)
 	
 		mostRed = Counter(redPixelList)
 		mostGreen = Counter(greenPixelList)
 		mostBlue = Counter(bluePixelList)
-
-
 
 		myRed = max(mostRed.values())
 		modeRed = [k for k, v in mostRed.items() if v == myRed]
@@ -59,9 +53,10 @@ for times in range(0,3):
 
 
 
-	print modeRed[0]
-	print modeGreen[0]
-	print modeBlue[0]
+	#PRINTS THE MODES OF EVERY COLOR IN TILE PARTS 
+	#print modeRed[0]
+	#print modeGreen[0]
+	#print modeBlue[0]
    
 	del redPixelList[:]
 	del greenPixelList[:]
@@ -80,7 +75,7 @@ for times in range(0,3):
 		beginHeight += beginHeight
 		beginWidth = 0
 
-	#grabing the modes of every tile	
+	#GRABING THE MODE OF EVERY COLOR IN THE LIST	
 	if(times == 0):
 		firstRedMode = modeRed[0]
 		firstGreenMode = modeGreen[0]
@@ -94,34 +89,76 @@ for times in range(0,3):
 		thirdGreenMode = modeGreen[0]
 		thirdBlueMode = modeBlue[0]
 
-#finalImg.show()
+#THIS FUNCTION SHOWS THE COLORS FOUND AS A FINAL RESULT
+#finalImg.show() 
 
-#print firstRedMode,firstGreenMode,firstBlueMode
-#print secondRedMode, secondGreenMode, secondBlueMode
-#print thirdRedMode, thirdGreenMode, thirdBlueMode
-
-#newIm.show()
 """
+-----------------------------------------------------------------------
+END TO FINDING THE COLORS
+-----------------------------------------------------------------------
+"""
+
+"""
+-----------------------------------------------------------------------
+CODE BELOW IS FOR TESTING PURPOSE, TRYING TO FIND A SOLUTION TO THE BLENDING OF BOTH IMAGES
+-----------------------------------------------------------------------
+"""
+
+bw_im = im.convert("1")
+new_im = bw_im.convert("RGB")
+pixels = new_im.getdata()
+
+print height
+print width
+
+finalPixels = []
+for item in pixels:
+    if item[0] == 255 and item[1] == 255 and item[2] == 255:
+        finalPixels.append((255, 255, 255, 0))
+    else:
+        finalPixels.append(item)
+
+finalImg.putdata(finalPixels)
+
+"""
+----------------------------------------------------------------------
+END OF TESTING CODE.
+----------------------------------------------------------------------
+"""
+
+"""
+FIXED THE INFINITE LOOP IT HAD.
+
+------------------------------------------------------------------------
+
+WORKS ALREADY, HOWEVER MUST FIND A WAY TO PLACE THE THE COLOR IMAGE INTO THE BLACK AND WHITE IMAGE
+
+bw_im = im.convert("1")
+new_im = bw_im.convert("RGB")
 
 for bwX in range(0,height):
 	for bwY in range(0,width):
-
-		bw_im = im.convert("1")
-		new_im = bw_im.convert("RGB")
-		r,g,b = new_im.getpixel((bwX,bwY))
+		r,g,b = new_im.getpixel((bwY,bwX))
+		print r,g,b
+		#print list(im.getdata())
 		
 		if (r == 255 and bwX < (height / 3) ):
 			print "First", bwX , bwY
-			r,g,b = (144,153,0)
+			r,g,b = (66,255,255)
+			new_im.putdata(r,g,b)
 		elif(r == 255 and (bwX > height/3) and (bwX < (height/3) *2)):
-			r,g,b = (165,172,131)
 			print "second", bwX, bwY
-		elif(r == 255 and bwX <= height): 
-			r,g,b = (100,95,62)
-			print "third", bwX, bwY
+			r,g,b = (255,48,17)
+			new_im.putdata(r,g,b)
+		elif(r == 255 and bwX <= height):
+			print "third" , bwX, bwY
+			r,g,b = (84,50,35)
+			new_im.putdata(r,g,b)
+		else:
+			print "Black"
+----------------------------------------------------------------------
 
+"""
 new_im.show()			
 print("Image Displayed.")
-
-
 
