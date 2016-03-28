@@ -89,7 +89,6 @@ for times in range(0,3):
 		thirdGreenMode = modeGreen[0]
 		thirdBlueMode = modeBlue[0]
 
-#THIS FUNCTION SHOWS THE COLORS FOUND AS A FINAL RESULT
 #finalImg.show() 
 
 """
@@ -108,17 +107,25 @@ bw_im = im.convert("1")
 new_im = bw_im.convert("RGB")
 pixels = new_im.getdata()
 
-print height
-print width
-
 finalPixels = []
-for item in pixels:
-    if item[0] == 255 and item[1] == 255 and item[2] == 255:
-        finalPixels.append((255, 255, 255, 0))
-    else:
-        finalPixels.append(item)
-
-finalImg.putdata(finalPixels)
+for bwX in range(0,height):
+	for bwY in range(0,width):
+		r,g,b = new_im.getpixel((bwY,bwX))
+		print r,g,b
+		#print list(im.getdata())
+		
+		if (r == 255 and bwX < (height / 3) ):
+			print "First", bwX , bwY
+			finalPixels.append((66,255,255,0))
+		elif(r == 255 and (bwX > height/3) and (bwX < (height/3) *2)):
+			print "second", bwX, bwY
+			finalPixels.append((255,48,17,0))
+		elif(r == 255 and bwX <= height):
+			print "third" , bwX, bwY
+			finalPixels.append((84,50,35,0))
+		else:
+			print "Black"
+			finalPixels.append((0,0,0,0))
 
 """
 ----------------------------------------------------------------------
@@ -135,6 +142,7 @@ WORKS ALREADY, HOWEVER MUST FIND A WAY TO PLACE THE THE COLOR IMAGE INTO THE BLA
 
 bw_im = im.convert("1")
 new_im = bw_im.convert("RGB")
+pixels = new_im.getdata()
 
 for bwX in range(0,height):
 	for bwY in range(0,width):
@@ -144,21 +152,19 @@ for bwX in range(0,height):
 		
 		if (r == 255 and bwX < (height / 3) ):
 			print "First", bwX , bwY
-			r,g,b = (66,255,255)
-			new_im.putdata(r,g,b)
+			finalPixels.append((66,255,255,0))
 		elif(r == 255 and (bwX > height/3) and (bwX < (height/3) *2)):
 			print "second", bwX, bwY
-			r,g,b = (255,48,17)
-			new_im.putdata(r,g,b)
+			finalPixels.append((255,48,17,0))
 		elif(r == 255 and bwX <= height):
 			print "third" , bwX, bwY
-			r,g,b = (84,50,35)
-			new_im.putdata(r,g,b)
+			finalPixels.append((84,50,35,0))
 		else:
 			print "Black"
+			finalPixels.append(0,0,0,0)
 ----------------------------------------------------------------------
 
 """
-new_im.show()			
+finalImg.putdata(finalPixels)
+finalImg.show()			
 print("Image Displayed.")
-
