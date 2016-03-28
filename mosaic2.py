@@ -1,6 +1,14 @@
 from PIL import Image
 from collections import Counter 
-im = Image.open("/home/michael/Documents/spring16/cst205/project2/realRainbow.jpg")
+from Tkinter import Tk
+from tkFileDialog import askopenfilename
+
+print "Please Choose A jpg Image.\n"
+
+Tk().withdraw()
+filename = askopenfilename()
+
+im = Image.open(filename)
 
 #CREATED LISTS TO KEEP TRACK OF THE VALUES OF EACH PIXEL
 redPixelList = []
@@ -25,7 +33,7 @@ finalImg = Image.new("RGB",(width,height),"Black")
 
 """
 -------------------------------------------------------------------
-BEGINNING TO FINDING THE COLORS OF OUR TILES 
+	BEGINNING TO FINDING THE COLORS OF OUR TILES 
 -------------------------------------------------------------------
 """
 
@@ -109,24 +117,27 @@ new_im = bw_im.convert("RGB")
 pixels = new_im.getdata()
 
 finalPixels = []
+
+
 for bwX in range(0,height):
 	for bwY in range(0,width):
 		r,g,b = new_im.getpixel((bwY,bwX))
-		print r,g,b
+		#print r,g,b
 		#print list(im.getdata())
 		
 		if (r == 255 and bwX < (height / 3) +1 ):
-			print "First", bwX , bwY
+			#print "First", bwX , bwY
 			finalPixels.append((firstRedMode,firstGreenMode,firstBlueMode,0))
 		elif(r == 255 and (bwX > height/3) and (bwX < (height/3) *2)):
-			print "second", bwX, bwY
+			#print "second", bwX, bwY
 			finalPixels.append((secondRedMode,secondGreenMode,secondBlueMode,0))
 		elif(r == 255 and bwX <= height):
-			print "third" , bwX, bwY
+			#print "third" , bwX, bwY
 			finalPixels.append((thirdRedMode,thirdGreenMode,thirdBlueMode,0))
 		else:
-			print "Black"
+			#print "Black"
 			finalPixels.append((0,0,0,0))
+	print "Loading ..."
 
 """
 ----------------------------------------------------------------------
@@ -134,6 +145,39 @@ END OF TESTING CODE.
 ----------------------------------------------------------------------
 """
 
+"""
+FIXED THE INFINITE LOOP IT HAD.
+
+------------------------------------------------------------------------
+
+WORKS ALREADY, HOWEVER MUST FIND A WAY TO PLACE THE THE COLOR IMAGE INTO THE BLACK AND WHITE IMAGE
+
+bw_im = im.convert("1")
+new_im = bw_im.convert("RGB")
+pixels = new_im.getdata()
+
+for bwX in range(0,height):
+	for bwY in range(0,width):
+		r,g,b = new_im.getpixel((bwY,bwX))
+		print r,g,b
+		#print list(im.getdata())
+		
+		if (r == 255 and bwX < (height / 3) ):
+			print "First", bwX , bwY
+			finalPixels.append((66,255,255,0))
+		elif(r == 255 and (bwX > height/3) and (bwX < (height/3) *2)):
+			print "second", bwX, bwY
+			finalPixels.append((255,48,17,0))
+		elif(r == 255 and bwX <= height):
+			print "third" , bwX, bwY
+			finalPixels.append((84,50,35,0))
+		else:
+			print "Black"
+			finalPixels.append(0,0,0,0)
+----------------------------------------------------------------------
+
+"""
 finalImg.putdata(finalPixels)
 finalImg.show()			
 print("Image Displayed.")
+
